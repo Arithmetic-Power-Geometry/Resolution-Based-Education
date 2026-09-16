@@ -1,1 +1,231 @@
-PLACEHOLDER
+\documentclass[11pt]{article}
+\usepackage[a4paper,margin=0.92in]{geometry}
+\usepackage{microtype,setspace,booktabs,tabularx,array,multirow,amsmath,amssymb,amsthm,mathtools,graphicx,tikz,pgfplots,algorithm,algpseudocode,hyperref,xcolor,enumitem,caption,csquotes}
+\usetikzlibrary{arrows.meta,positioning,shapes.geometric,fit}
+\pgfplotsset{compat=1.18}
+\usepackage[nameinlink,noabbrev]{cleveref}
+\usepackage[backend=biber,style=apa,sorting=nyt,maxbibnames=99]{biblatex}
+\DeclareLanguageMapping{english}{english-apa}
+\addbibresource{references.bib}
+\hypersetup{colorlinks=true,linkcolor=black,citecolor=blue,urlcolor=blue}
+\setstretch{1.04}
+\newtheorem{theorem}{Theorem}
+\newtheorem{definition}{Definition}
+\newtheorem{proposition}{Proposition}
+\newcommand{\cA}{\mathcal{A}}\newcommand{\cE}{\mathcal{E}}\newcommand{\RBE}{\textsc{RBE}}
+\title{\textbf{Beyond Outcome Attainment: Resolution-Based Education and the Certification--Assessment Resolution Gap in the Generative-AI Era}}
+\author{Mohammad Amir Khusru Akhtar\\Usha Martin University, Ranchi, India}
+\date{}
+\begin{document}\maketitle
+\begin{abstract}
+Generative artificial intelligence can produce polished academic artifacts while leaving uncertain which learner capabilities those artifacts support. We formalize the resulting decision problem as the \emph{Certification--Assessment Resolution Gap} (CARG): an assessment protocol may leave certification-relevant learner worlds observationally equivalent even though the intended credential requires different decisions. A necessary condition for universally correct certification is therefore that each assessment-equivalence class be homogeneous with respect to the certification rule. Building on this condition, we formulate the scientific foundation of Resolution-Based Education (RBE) as a conservative extension of outcome-based education: existing performance evidence is reused, additional burden is zero whenever current evidence is already resolution-adequate, and otherwise a finite adaptive policy seeks the least-burdensome admissible evidence needed to resolve the remaining decision. To align the foundation with the RBE operating architecture, we formalize Resolvable Capability Outcomes, distinguish one-step discriminating probes from complete Minimum Resolution-Restoring Perturbations, define positive resolved attainment and explicit AR/AU/RN/NA/Deferred states, and derive course/programme metrics including RNR. Reproducible tests include deterministic and probabilistic mechanisms, a policy-tree case, 20,000 Monte Carlo episodes, and retrospective analysis of 32,593 Open University student-module records. Falsification controls reject a broad predictive-superiority claim. The surviving empirical result is narrower: under the declared retrospective proxy setup, selective adaptive acquisition reduces evidence burden while strong fixed-confidence controls remain competitive on risk.
+\end{abstract}
+\noindent\textbf{Keywords:} resolution-based education; outcome-based education; certification validity; generative artificial intelligence; adaptive assessment; evidence efficiency
+
+\section{Introduction}
+Universities do more than rank performances; they make consequential claims about what learners can understand, judge, verify, transfer, and responsibly do. Validity theory treats assessment as an evidentiary argument linking observations to interpretations and uses \parencite{messick1995validity}, while evidence-centered design begins with claims, evidence, and tasks capable of producing that evidence \parencite{mislevy2003ecd}. Generative AI makes this inferential step unusually visible because polished work can be produced under materially different human--tool configurations \parencite{bearman2024evaluative,luo2024policies,xia2024scoping,khlaif2025redesign}.
+
+RBE does not claim that outcome-based education (OBE), authentic assessment, programmatic assessment, oral defence, dynamic assessment, or adaptive testing are obsolete. Rich OBE systems can already use projects, laboratories, portfolios, direct evidence, and multiple assessment modes. The narrower problem is that outcome attainment does not by itself guarantee certification resolution: the evidence used to infer attainment may still merge learner possibilities that the intended credential must treat differently.
+
+This foundation paper asks one scientific question: \emph{what must an assessment protocol be able to distinguish before a capability-bearing certification decision is justified?} The companion architecture paper operationalizes this foundation at programme, curriculum, governance, software, audit, and continuous-improvement levels. Here the contribution is deliberately narrower: (1) CARG as a decision-relative mismatch between assessment and certification partitions; (2) a Certification Resolution Necessity theorem; (3) a conservative-extension/evidence-reuse result; (4) a distinction between one-step discriminating probes and complete adaptive resolution policies; (5) positive resolved-attainment mathematics synchronized with the operating architecture; and (6) reproducible mechanism tests and falsification experiments that retain negative results.
+
+\section{Certification Resolution}
+Let $W$ be a set of certification-relevant learner worlds and let $g:W\to D$ be the intended certification rule. A world is a modeling device for educationally relevant capability configurations, not a claim about an inaccessible mental essence.
+
+\begin{definition}[Assessment equivalence]
+For protocol $\cA$, define
+\[
+w_i\sim_{\cA}w_j\Longleftrightarrow\begin{array}{c}\text{all evidence obtainable under $\cA$ is observationally}\\\text{indistinguishable between $w_i$ and $w_j$}.\end{array}
+\]
+The relation induces $\Pi_{\cA}=W/\!\sim_{\cA}$.
+\end{definition}
+The certification rule induces partition $\Pi_g$. We use the convention $\Pi_{\cA}\preceq\Pi_g$ to mean every assessment-equivalence class is contained within one certification-decision class.
+
+\begin{definition}[Certification--Assessment Resolution Gap]
+A CARG exists when $\Pi_{\cA}\npreceq\Pi_g$, equivalently when
+\[
+\exists w_i,w_j\in W:\; w_i\sim_{\cA}w_j\land g(w_i)\neq g(w_j).
+\]
+\end{definition}
+
+\begin{theorem}[Certification Resolution Necessity]
+If there exist $w_i,w_j$ with $w_i\sim_{\cA}w_j$ but $g(w_i)\neq g(w_j)$, no decision rule based exclusively on evidence obtainable under $\cA$ can be universally correct with respect to $g$.
+\end{theorem}
+\begin{proof}
+The complete $\cA$-observable evidence is identical, or distribution-equivalent in the stochastic extension, in the two worlds. Any decision rule measurable with respect to that evidence must return the same decision for both, while $g$ requires different decisions. At least one output must therefore disagree with $g$.
+\end{proof}
+
+\begin{proposition}[Outcome--Resolution Separation]
+There exist learner worlds and an outcome criterion for which both worlds attain the same performance outcome while remaining assessment-equivalent and requiring different certification decisions. Hence outcome attainment does not imply certification resolution.
+\end{proposition}
+This does not imply that OBE is defective; attainment and evidential sufficiency are logically distinct.
+
+\begin{proposition}[Conservative Extension / Evidence Reuse]
+If the initial evidence state $K_0$ already satisfies the declared certification-resolution criterion, then
+\[
+B_{\mathrm{add}}(K_0)=0.
+\]
+Thus resolution-adequate OBE is a zero-additional-evidence case of RBE.
+\end{proposition}
+
+\section{From One-Step Probes to Complete Resolution Policies}
+Let $K_t$ denote current evidence and $W(K_t)$ the compatible worlds. A candidate probe $e\in\cE$ has burden
+\[
+B_\lambda(e)=c(e)+\lambda L(e),\qquad \lambda\ge0,
+\]
+where $c(e)$ is direct assessment burden and $L(e)$ is assessment leakage: capability-relevant information supplied by the assessment itself.
+
+A one-step probe is \emph{fully resolving} when it separates every currently compatible cross-decision pair. In that special case,
+\[
+e_t^*\in\arg\min_{e\in\cE} B_\lambda(e)\quad\text{subject to full decision separation.}
+\]
+More generally, one probe can be informative without reaching the declared terminal condition. We therefore reserve \emph{Minimum Resolution-Restoring Perturbation} (MRRP) for a probe or adaptive policy/tree whose terminal evidence satisfies the resolution criterion. For policy $\pi$ with stopping time $\tau_\pi$,
+\[
+\pi^*\in\arg\min_{\pi\in\Pi_{\mathrm{adm}}}\mathbb{E}[B(\pi)]
+\]
+subject to terminal resolution and validity, reliability, accessibility, fairness, privacy, leakage, and maximum-burden constraints. This synchronizes the scientific definition with the operating architecture and avoids calling a merely informative one-step question a complete MRRP.
+
+For noisy responses, let $D=g(W)$ and $Y_e$ be the response to probe $e$. Decision information gain is
+\[
+IG_D(e)=H(D)-\mathbb{E}[H(D\mid Y_e)],
+\]
+which connects RBE to established information and experiment-design ideas \parencite{shannon1948,lindley1956,blackwell1953}. Posterior decision risk is
+\[
+r_t=1-\max_{d\in D}P(D=d\mid K_t).
+\]
+Stopping at $r_t\le\epsilon$ is related to reject-option and selective classification \parencite{chow1970,elyaniv2010,gangrade2021}; RBE's specific object is the educational certification distinction being resolved.
+
+\section{Framework-Synchronized RBE Core}
+\subsection{Resolvable Capability Outcomes}
+For course capability $j$, define
+\[
+RCO_j=(C_j,E_j,P_j,D_j),
+\]
+where $C_j$ is the capability claim, $E_j$ the relevant environments/tool conditions, $P_j$ the admissible perturbation/evidence family, and $D_j$ the certification distinction. A conventional CO is retained but enriched with evidence and decision semantics.
+
+Learning Evidence and Certification Evidence remain distinct. Hints, collaboration, retries, and AI assistance may be appropriate during learning, while certification evidence must be fit for the intended decision \parencite{black1998assessment,hattie2007feedback,nicol2006feedback}. AI may be prohibited, permitted, required, adversarial, or uncertain depending on the RCO rather than by blanket rule.
+
+\subsection{Performance, resolution, and attainment}
+Let $S_{ij}$ be learner $i$'s performance score on RCO $j$ and $T_j$ the declared threshold:
+\[
+A_{ij}=\mathbf{1}[S_{ij}\ge T_j].
+\]
+Let $\widehat D_{ij}$ be the resolved decision, $d_j^+$ the positive certification decision, $r_{ij}$ the decision risk, and $\epsilon_j$ the resolution threshold. Define positive resolution as
+\[
+Q^+_{ij}=\mathbf{1}[r_{ij}\le\epsilon_j\land \widehat D_{ij}=d_j^+],
+\]
+and Resolved Capability Attainment as
+\[
+RCA_{ij}=A_{ij}Q^+_{ij}.
+\]
+Low risk alone is not attainment because it can support either a positive or a negative decision.
+
+The operational states are mutually distinguishable: attained--resolved positive (AR), attained--unresolved (AU), performance-attained but resolved-negative (RN) where institutionally meaningful, not attained (NA), and Deferred when authorized evidence may still be collected or the procedural/burden boundary has been reached.
+
+For $N$ eligible learner--RCO records,
+\begin{align*}
+PAR_j&=\frac{1}{N}\sum_i A_{ij}, & RAR_j&=\frac{1}{N}\sum_i RCA_{ij},\\
+UAR_j&=\frac{\#\{i:A_{ij}=1,\;\mathrm{unresolved}\}}{N}, & RNR_j&=\frac{\#\{i:A_{ij}=1,\;\mathrm{resolved\text{-}negative}\}}{N},\\
+RR_j&=\frac{\#\{i:\mathrm{resolution\ criterion\ met}\}}{N}, & MRB_j&=\frac{1}{N}\sum_i B_{ij}.
+\end{align*}
+When performance-attained cases are exhaustively partitioned into resolved-positive, unresolved, and resolved-negative states,
+\[
+PAR_j=RAR_j+UAR_j+RNR_j.
+\]
+If an institution does not permit RN as a distinct state, this identity must be adapted to the approved state space rather than forced.
+
+For mapping weight $M_{jk}$ from RCO $j$ to programme outcome $k$,
+\[
+PPO_k=\frac{\sum_jM_{jk}PAR_j}{\sum_jM_{jk}},\quad
+RPO_k=\frac{\sum_jM_{jk}RAR_j}{\sum_jM_{jk}},\quad
+UPO_k=\frac{\sum_jM_{jk}UAR_j}{\sum_jM_{jk}}.
+\]
+These are compatibility-layer summaries, not substitutes for direct programme-level evidence for integrative/high-stakes claims.
+
+\subsection{Examination interpretation}
+RBE does not replace an approved 100-mark structure with ``resolution marks.'' Existing examinations, laboratories, projects, and internal assessments populate $K_0$. A separate Resolution Gate is invoked only for capability claims whose current evidence is decision-insufficient. If $K_0$ is adequate, the conservative-extension proposition stops the process. If not, targeted evidence is gathered within a burden cap. Thus two learners may both retain 82/100 while one is AR and another AU; the latter is an evidence-status statement, not a misconduct finding.
+
+\section{Relation to Established Approaches}
+RBE does not claim invention of authentic assessment, oral defence, programmatic assessment, adaptive testing, information gain, Bayesian updating, equivalence relations, or abstention. Validity and ECD already treat assessment as evidence for claims \parencite{messick1995validity,mislevy2003ecd}; dynamic assessment uses interaction to reveal developing capability \parencite{allal2000zpd,poehner2011validity}; authentic assessment emphasizes realistic performance \parencite{gulikers2004authentic}; and adaptive/sequential methods optimize evidence acquisition \parencite{vanderlinden2010,wald1947}. Contemporary GenAI research also emphasizes assessment validity, evaluative judgement, redesign, verification, and appropriate reliance \parencite{bearman2024evaluative,khlaif2025redesign,ali2026validity,bannister2025pandora,fok2024verifiability,passi2024reliance}.
+
+The proposed object is narrower: whether the observational partition supplied by an assessment is sufficient for the certification partition the institution claims to implement, and, if not, what additional admissible evidence restores that decision-relative resolution.
+
+\section{Reproducible Mechanism Tests}
+\subsection{Deterministic full-separator benchmark}
+Four constructed worlds initially produce the same artifact observation, leaving four cross-decision pairs unresolved. At $\lambda=1$, candidate burdens are shown in \Cref{tab:det}. The wrong-AI check is cheapest but infeasible as a complete one-step resolver; the constraint shift is the cheapest feasible full separator.
+\begin{table}[t]\centering
+\caption{Deterministic resolving benchmark.}\label{tab:det}
+\begin{tabular}{lrrl}\toprule Probe & Cost+leakage & Raw rank & Full separator?\\\midrule
+Wrong-AI check & 0.55 & 1 & No\\
+Constraint shift & 1.10 & 2 & Yes\\
+Transfer task & 1.25 & 3 & Yes\\
+Generic viva & 6.00 & 4 & Yes\\\bottomrule\end{tabular}
+\end{table}
+
+\subsection{Adaptive policy-tree test}
+A small-world construction uses four worlds and two probes such that neither probe alone is a full separator. Exact deterministic policy search applies one probe first and conditionally applies the second only on the unresolved branch. Under equal prior mass, expected burden is 1.5 rather than 2.0 for always administering both probes. This verifies the distinction between a one-step discriminating probe and a complete resolution-restoring policy; it is not evidence of educational effectiveness.
+
+\subsection{Monte Carlo falsification}
+A 20,000-episode seeded simulation compares adaptive RBE, a fixed targeted sequence, and a generic viva. Saved results are shown in \Cref{tab:mc}. Adaptive RBE resolves more episodes and is far cheaper than the generic viva, but its error among resolved cases is higher than the fixed targeted sequence. This negative result motivates risk-constrained stopping rather than maximizing resolution alone.
+\begin{table}[t]\centering
+\caption{Monte Carlo mechanism test, seed 20260916.}\label{tab:mc}
+\begin{tabular}{lrrrr}\toprule Protocol & Resolved & Error/resolved & Mean burden & Mean probes\\\midrule
+Adaptive RBE & 0.9645 & 0.0861 & 2.4455 & 1.8261\\
+Fixed targeted & 0.7736 & 0.0645 & 2.0769 & 2.3415\\
+Generic viva & 0.4686 & 0.0768 & 6.0000 & 1.0000\\\bottomrule\end{tabular}
+\end{table}
+
+\section{Retrospective OULAD Study}
+The Open University Learning Analytics Dataset contains 32,593 student-module records and 10,655,280 daily VLE interaction summaries \parencite{kuzilek2017oulad}. OULAD predates GenAI and RBE and is used only as a retrospective proxy for evidence acquisition, not as causal evidence that RBE improves education.
+
+At cutoff 120, the held-out all-outcomes test set has $n=6{,}505$. \Cref{tab:oulad} gives the primary comparison. The lower risk for the resolved RBE subset is not interpreted as superiority because coverage differs; when forced to decide all cases, RBE risk equals the enhanced fixed-evidence risk (0.214297).
+\begin{table}[t]\centering
+\caption{Held-out OULAD comparison at cutoff 120.}\label{tab:oulad}
+\small\begin{tabular}{lrrrrr}\toprule Protocol & Coverage & Risk & Accuracy & AUC & Burden\\\midrule
+Score-only & 1.0000 & 0.2397 & 0.7603 & 0.8347 & 1.000\\
+Enhanced fixed all evidence & 1.0000 & 0.2143 & 0.7857 & 0.8802 & 6.000\\
+RBE adaptive resolved, $\epsilon=.20$ & 0.5273 & 0.0880 & 0.9120 & 0.9409 & 3.633\\
+Fixed matched-budget prefix & 1.0000 & 0.2161 & 0.7839 & 0.8792 & 4.000\\\bottomrule\end{tabular}
+\end{table}
+
+Matched-coverage falsification is stricter (\Cref{tab:falsification}). Risk dominance is not consistent. What survives is evidence burden. For the primary $\epsilon=.20$ comparison, mean burden falls from 6.0 to 3.633 channels. A 5,000-resample paired bootstrap gives mean saving 2.366795 channels (39.45\%), 95\% percentile CI [2.311145, 2.423682], corrected one-sided empirical $p=0.0002$, with resolved coverage 0.527287. This quantifies a stable burden effect under the declared proxy setup; it does not establish causal educational benefit.
+\begin{table}[t]\centering
+\caption{Matched-coverage falsification at cutoff 120.}\label{tab:falsification}
+\small\begin{tabular}{llrrr}\toprule Population & Method & Risk & Coverage & Burden\\\midrule
+All, $\epsilon=.10$ & RBE adaptive & 0.02276 & 0.31068 & 4.582\\
+All, $\epsilon=.10$ & Fixed confidence & 0.02326 & 0.31068 & 6.000\\
+All, $\epsilon=.20$ & RBE adaptive & 0.08805 & 0.52729 & 3.633\\
+All, $\epsilon=.20$ & Fixed confidence & 0.07318 & 0.52729 & 6.000\\
+Completers, $\epsilon=.20$ & RBE adaptive & 0.13889 & 0.64128 & 2.956\\
+Completers, $\epsilon=.20$ & Fixed confidence & 0.12951 & 0.64128 & 6.000\\\bottomrule\end{tabular}
+\end{table}
+
+\section{Worked Course Interpretation}
+Consider a Theory of Computation RCO requiring construction and justification of computational models, detection of invalid reasoning, and adaptation when a material constraint changes. Two learners each receive 82/100 under the approved course assessment and satisfy the same performance threshold. Suppose initial evidence remains compatible with both robust construction and pattern reproduction/tool dependence, and that distinction matters to the certification claim. A short predeclared constraint-shift perturbation asks for adaptation and justification. If learner A's response resolves the positive decision while learner B remains ambiguous, RBE records A as AR and B as AU while retaining the original mark for both. This does not imply cheating, incompetence, or access to a learner's hidden mental state; it states only that equal performance scores need not carry equal certification resolution.
+
+\section{Interpretation, Limitations, and Research Agenda}
+Three conclusions survive. First, CARG is structural: a credential may demand a distinction that its assessment language cannot observe. Second, additional evidence should be decision-targeted rather than automatically larger in volume. Third, assessment burden is a legitimate design variable when validity, fairness, reliability, and risk are held to declared standards.
+
+Several stronger claims do not survive: adaptive RBE is not established as more accurate than strong fixed evidence; the current acquisition order is not uniquely optimal; OULAD does not validate GenAI-specific assessment; and neither synthetic worlds nor retrospective data establish fairness, learning gains, or institutional superiority. A prospective study should compare current OBE/fixed assessment, enhanced authentic/fixed verification assessment, programmatic evidence where applicable, and adaptive RBE on the same capability claims, reporting transfer, error detection, misleading-AI resistance, calibration, false certification, false non-certification, coverage, burden, inter-rater reliability, subgroup invariance, and downstream performance.
+
+The companion architecture paper should cite this foundation for CARG, the necessity theorem, conservative extension, MRRP distinction, and resolved-attainment mathematics, while contributing the full curriculum/governance/software/accreditation architecture rather than re-presenting the foundation as a second novelty claim.
+
+\section{Conclusion}
+Generative AI does not make outcomes irrelevant. It makes a longstanding inferential question harder to ignore: does observed attainment provide enough evidence for the capability distinction a credential claims to make? RBE formalizes the failure case as CARG and places certification resolution between performance evidence and capability-bearing decisions. When current evidence is resolution-adequate, RBE adds nothing. When it is not, RBE seeks the least-burdensome admissible evidence needed to reach a declared decision standard, distinguishes positive resolution from mere low uncertainty, permits explicit defer/abstention, and preserves unresolved and resolved-negative cases in reporting.
+
+The central proposition remains: \emph{outcomes are not self-certifying}. The scientific question behind a capability-bearing credential is whether the assessment resolves the distinction that the certificate claims to make.
+
+\section*{Data and Code Availability}
+Software, tests, benchmark generators, workflow definitions, test registry entries, and saved result files used in this paper are available at \url{https://github.com/Arithmetic-Power-Geometry/Resolution-Based-Education} under the Apache License 2.0. OULAD is not redistributed; provenance and retrieval instructions are recorded in the repository.
+
+\section*{Reproducibility Statement}
+Monte Carlo experiments use fixed seed 20260916. OULAD analyses use student-disjoint training, validation, and test splits and held-out evaluation. The burden uncertainty analysis uses 5,000 paired bootstrap resamples. The reproducibility package includes executable tests for positive resolved attainment and a deterministic adaptive policy-tree case in which no one-step probe fully resolves the decision. Results from failed CI runs are not used as evidence.
+
+\section*{Declarations}
+\textbf{Funding:} No external funding was received for this study.\\
+\textbf{Competing interests:} The author declares no competing interests.\\
+\textbf{Ethics statement:} The theoretical and synthetic experiments did not involve human participants. The OULAD component is a retrospective analysis of a public, de-identified dataset; no new participant recruitment or intervention was conducted.\\
+\textbf{Author contributions:} Mohammad Amir Khusru Akhtar: conceptualization, methodology, formal analysis, software, validation, investigation, writing--original draft, writing--review and editing.
+
+\begingroup\small\setlength{\bibitemsep}{0.35\baselineskip}\printbibliography\endgroup
+\end{document}
