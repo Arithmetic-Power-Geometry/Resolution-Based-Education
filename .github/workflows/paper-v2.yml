@@ -1,0 +1,42 @@
+name: paper-v2
+
+on:
+  push:
+    branches: ["rbe-paper-v2-framework-sync"]
+  pull_request:
+    paths:
+      - "manuscript/v2/**"
+      - "rbe/attainment.py"
+      - "rbe/policy.py"
+      - "tests/test_attainment.py"
+      - "tests/test_policy.py"
+      - ".github/workflows/paper-v2.yml"
+
+jobs:
+  test-and-build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install Python test dependencies
+        run: pip install pytest
+      - name: Run repository tests
+        run: pytest -q
+      - name: Install LaTeX toolchain
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y texlive-latex-extra texlive-bibtex-extra biber texlive-pictures
+      - name: Build Paper V2
+        working-directory: manuscript/v2
+        run: |
+          pdflatex -interaction=nonstopmode -halt-on-error main.tex
+          biber main
+          pdflatex -interaction=nonstopmode -halt-on-error main.tex
+          pdflatex -interaction=nonstopmode -halt-on-error main.tex
+      - name: Upload compiled paper
+        uses: actions/upload-artifact@v4
+        with:
+          name: rbe-paper-v2
+          path: manuscript/v2/main.pdf
