@@ -6,27 +6,33 @@ This registry is append-only in spirit: every scientifically meaningful mechanis
 
 | ID | Test | Scientific question | Data | Expected interpretation |
 |---|---|---|---|---|
-| T001 | Artifact-only CARG | Can identical artifact evidence leave worlds requiring opposite certification decisions observationally compatible? | Constructed W1-W4 | Yes demonstrates structural non-identifiability in the construction. |
-| T002 | Cheapest full separator | Among supplied experiments, which minimum cost+leakage intervention separates every unresolved certification-incompatible pair? | Constructed W1-W4 + candidate experiments | MRRP selects the cheapest feasible full separator, not simply the cheapest probe. |
-| T003 | Resolution restoration | Does the selected MRRP remove the CARG in the constructed case? | Constructed W1-W4 | Selected full separator produces decision-homogeneous observational cells. |
-| T004 | Leakage sensitivity | Can changing lambda in cost + lambda*leakage alter the selected experiment? | Constructed competing probes | Yes; makes the burden/leakage tradeoff empirically inspectable. |
-| T005 | No-CARG resolved control | Does a protocol already separating pass/fail worlds correctly report no CARG? | Constructed W1-W4 | Sanity/control test. |
-| T006 | Initial decision entropy | Does the balanced certify/do-not-certify benchmark begin with exactly one bit of decision uncertainty? | Probabilistic W1-W4 | Sanity check for the probabilistic decision-relative criterion. |
-| T007 | Positive probe information | Do the declared noisy perturbations reduce expected certification-decision uncertainty? | `probabilistic_probe_benchmark.csv` | Each informative perturbation must have positive decision information gain. |
-| T008 | Resolution-threshold dependence | Does the cheapest qualifying experiment change when the required decision-information threshold becomes stricter? | Probabilistic W1-W4 | Demonstrates that cheapest means cheapest subject to sufficient resolution, not minimum raw cost. |
-| T009 | Resolution efficiency vs generic viva | Does a targeted perturbation provide more expected decision information per burden than the expensive generic viva under the declared model? | Probabilistic W1-W4 | Mechanism-level efficiency comparison; not a human-study superiority claim. |
-| T010 | Artifact zero-information control | When all worlds have the same artifact response distribution, does artifact-only evidence supply zero certification-decision information? | Probabilistic W1-W4 | Probabilistic analogue of AIRC/CARG construction. |
+| T001 | Artifact-only CARG | Can identical artifact evidence leave worlds requiring opposite certification decisions observationally compatible? | Constructed W1-W4 | Structural non-identifiability construction. |
+| T002 | Cheapest full separator | Which minimum cost+leakage intervention separates every unresolved certification-incompatible pair? | Constructed W1-W4 | Cheapest feasible full separator, not cheapest raw probe. |
+| T003 | Resolution restoration | Does selected MRRP remove CARG? | Constructed W1-W4 | Decision-homogeneous cells after resolving intervention. |
+| T004 | Leakage sensitivity | Can lambda alter selected experiment? | Constructed competing probes | Burden/leakage tradeoff. |
+| T005 | No-CARG resolved control | Does already-resolved protocol report no CARG? | Constructed W1-W4 | Control. |
+| T006 | Initial decision entropy | Does balanced benchmark begin with one bit decision uncertainty? | Probabilistic W1-W4 | Probabilistic sanity check. |
+| T007 | Positive probe information | Do noisy perturbations reduce certification uncertainty? | probabilistic benchmark | Positive decision information gain. |
+| T008 | Resolution-threshold dependence | Does cheapest qualifying experiment change with stricter resolution requirement? | probabilistic benchmark | Cheapest is conditional on sufficient resolution. |
+| T009 | Resolution efficiency vs generic viva | Can targeted probe yield more decision information per burden? | probabilistic benchmark | Mechanism efficiency comparison. |
+| T010 | Artifact zero-information control | Does identical artifact distribution yield zero decision information? | probabilistic benchmark | Probabilistic CARG/AIRC control. |
+| T011 | Adaptive resolution rate | Does adaptive RBE resolve more noisy episodes than fixed targeted and one-viva protocols? | 20,000 seeded synthetic episodes | Adaptive RBE: 96.45%; targeted: 77.355%; viva: 46.86%. |
+| T012 | Adaptive burden vs viva | Is adaptive RBE lower burden than generic viva? | same simulation | Mean 2.4455 vs 6.0; mechanism-level burden advantage. |
+| T013 | Adaptive stopping efficiency | Does adaptive stopping use fewer probes than fixed targeted sequence? | same simulation | Mean 1.8261 vs 2.3415 probes. |
+| T014 | Error-tradeoff falsification | Does adaptive RBE fail to dominate fixed targeted assessment on resolved-case error? | same simulation | Yes: 8.61% vs 6.45%; prevents false superiority claim and motivates risk-constrained resolution. |
 
 ## Current significant results
 
 ### Deterministic benchmark
-For `data/cheapest_experiment_benchmark.csv`, artifact-only evidence maps W1-W4 to the same `excellent` observation while W1/W2 require certify and W3/W4 require do-not-certify. Four cross-decision pairs remain unresolved. At leakage weight lambda=1, `wrong-ai-check` has the smallest raw burden (0.55) but fails to separate all required pairs. `constraint-shift` is the cheapest feasible full separator at burden 1.10; `transfer` costs 1.25 and `generic-viva` 6.00.
+Artifact-only evidence leaves four cross-decision pairs unresolved. At lambda=1, wrong-AI-check is cheapest raw burden (0.55) but is not a full separator. Constraint-shift is the cheapest feasible full separator (1.10), versus transfer 1.25 and generic viva 6.00.
 
 ### Probabilistic benchmark
-For `data/probabilistic_probe_benchmark.csv`, learner responses are noisy. The test criterion becomes decision-relative expected information. A probe is eligible only if it reaches a declared minimum information threshold; among eligible probes, RBE selects the minimum burden. This explicitly falsifies the simplistic rule "always choose the cheapest probe." Targeted probes are also compared with generic viva using expected decision information per burden.
+Probe eligibility depends on a declared minimum decision-information threshold. The cheapest useful experiment can therefore change as the required resolution becomes stricter. Artifact-only evidence is zero-information in the constructed collapse case.
 
-Both are mechanism results under declared observations/probabilities, not real-world educational-effectiveness claims.
+### Adaptive Monte Carlo benchmark
+At seed 20260916, n=20,000 and posterior decision threshold 0.90: adaptive RBE resolves 96.45% with mean burden 2.4455 and 1.8261 probes; fixed targeted resolves 77.355% with burden 2.0769 and 2.3415 probes; one generic viva resolves 46.86% with burden 6.0. Crucially, adaptive RBE has higher resolved-case error (8.61%) than fixed targeted (6.45%). This negative result is retained as a falsification constraint: resolution must be jointly controlled with decision risk.
+
+All results above are synthetic mechanism validation, not real-world educational-effectiveness claims.
 
 ## Rule for future work
-
-Whenever a test has scientific significance: (1) commit executable test code, (2) commit the input dataset or deterministic generator, (3) commit/report its interpretation and limitations, and (4) append a row here. Human-study results must identify provenance, sample, protocol, uncertainty, and ethics/consent status where applicable.
+Whenever a test has scientific significance: (1) commit executable test code, (2) commit the input dataset or deterministic generator, (3) commit/save numerical results, (4) commit/report interpretation and limitations, and (5) append a row here. Human-study results must identify provenance, sample, protocol, uncertainty, and ethics/consent status where applicable.
