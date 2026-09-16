@@ -1,0 +1,67 @@
+% Scientific-framework synchronization patch for Paper V2.
+% Inserted from main.tex before Novelty Boundary.
+
+\section{Framework-Synchronized Scientific Core}
+\label{sec:framework-sync-core}
+
+The present article is intentionally the first scientific paper in a broader RBE programme rather than the complete institutional framework. It therefore imports only those framework components needed to make the scientific claims internally complete: Resolvable Capability Outcomes, conservative extension, adaptive resolution policies, positive resolved attainment, and course/programme reporting semantics. Governance, accreditation, institution-wide progression, and full policy design are reserved for a separate framework paper.
+
+\subsection{Resolvable Capability Outcomes and conservative extension}
+For outcome $j$, define
+\[
+\mathrm{RCO}_j=(C_j,E_j,P_j,D_j),
+\]
+where $C_j$ is the capability claim, $E_j$ the relevant environments and legitimate tool conditions, $P_j$ the admissible perturbation/evidence family, and $D_j$ the certification distinction. A conventional course outcome is therefore not discarded; it is enriched with evidence and decision semantics.
+
+RBE satisfies an evidence-reuse principle. If the initial evidence state $K_0$ already satisfies the declared resolution criterion, no additional assessment is required:
+\[
+B_{\mathrm{add}}(K_0)=0.
+\]
+Hence resolution-adequate OBE is a zero-additional-evidence case of RBE. This property is important both conceptually and operationally: RBE does not justify a second examination merely because RBE is being used.
+
+\subsection{From one-step perturbations to adaptive resolution policies}
+A single probe can be decision-informative without actually restoring certification resolution. We therefore distinguish a one-step discriminating probe from a complete adaptive resolution-restoring policy. For an admissible policy $\pi$ with stopping time $\tau_\pi$, the general objective is
+\[
+\pi^*\in\arg\min_{\pi\in\Pi_{\rm adm}}\mathbb{E}[B(\pi)]
+\]
+subject to terminal evidence meeting the declared decision-resolution criterion and all validity, accessibility, reliability, fairness, privacy, and maximum-burden constraints. The deterministic one-step MRRP benchmark in this article is the special case in which one perturbation alone resolves every remaining cross-decision pair. The repository now also includes an exact small-world policy-tree kernel that verifies cases in which no single probe is sufficient but an adaptive sequence is.
+
+\subsection{Performance attainment and positive certification resolution}
+RBE separates performance from certification resolution. Let $S_{ij}$ be learner $i$'s performance score for RCO $j$ and $T_j$ the declared performance threshold:
+\[
+A_{ij}=\mathbf{1}[S_{ij}\ge T_j].
+\]
+Let $r_{ij}$ be decision risk, $\epsilon_j$ the resolution threshold, $\widehat D_{ij}$ the resolved decision, and $d_j^+$ the positive certification decision. Positive resolution is
+\[
+Q^+_{ij}=\mathbf{1}[r_{ij}\le\epsilon_j\ \land\ \widehat D_{ij}=d_j^+],
+\]
+and Resolved Capability Attainment is
+\[
+\mathrm{RCA}_{ij}=A_{ij}Q^+_{ij}.
+\]
+The positive-decision condition is essential: low risk can support either a positive or a negative decision and therefore cannot by itself be interpreted as attainment.
+
+Operational states should remain visible: attained--resolved positive (AR), attained--unresolved (AU), attained--resolved negative (RN) where institutionally meaningful, not attained (NA), and deferred when further authorized evidence remains possible.
+
+\subsection{Course and programme reporting}
+For $N$ eligible learner-RCO records,
+\[
+\mathrm{PAR}_j=\frac{1}{N}\sum_i A_{ij},\qquad
+\mathrm{RAR}_j=\frac{1}{N}\sum_i\mathrm{RCA}_{ij},
+\]
+\[
+\mathrm{UAR}_j=\frac{\#\{i:A_{ij}=1,\ i\text{ unresolved}\}}{N},\qquad
+\mathrm{MRB}_j=\frac{1}{N}\sum_i B_{ij}.
+\]
+The resolution rate $\mathrm{RR}_j$ counts all cases meeting the declared resolution criterion, positive or negative. If the only performance-attained terminal states are AR and AU, then $\mathrm{PAR}_j=\mathrm{RAR}_j+\mathrm{UAR}_j$; if a separate resolved-negative state exists, that state must be reported explicitly rather than forcing the identity.
+
+For an RCO-to-programme-outcome mapping weight $M_{jk}$, an implementation-compatible aggregation is
+\[
+\mathrm{PPO}_k=\frac{\sum_jM_{jk}\mathrm{PAR}_j}{\sum_jM_{jk}},\quad
+\mathrm{RPO}_k=\frac{\sum_jM_{jk}\mathrm{RAR}_j}{\sum_jM_{jk}},\quad
+\mathrm{UPO}_k=\frac{\sum_jM_{jk}\mathrm{UAR}_j}{\sum_jM_{jk}}.
+\]
+These quantities are a bridge to current programme-attainment practice rather than a claim that weighted course mappings alone validate complex programme competence.
+
+\subsection{Same mark, different certification status}
+The practical distinction is easiest to see with two learners who both obtain, for example, $82/100$ in the same course. Their performance attainment can be identical. If a short, predeclared constraint-shift or verification probe shows that one learner's evidence resolves the intended capability claim while the other's remains compatible with certification-incompatible explanations, RBE records the first as AR and the second as AU without changing the original mark. This is not a finding of misconduct and not an attempt to infer an inaccessible mental essence; it is a statement about the sufficiency of the available evidence for the institution's own certification claim.
