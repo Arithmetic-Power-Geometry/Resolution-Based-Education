@@ -1,0 +1,4 @@
+protocol,n,threshold,resolved_rate,unresolved_rate,decision_error_rate_all,decision_error_rate_resolved,mean_burden,mean_probes
+adaptive_rbe,20000,0.9,0.9645,0.0355,0.08305,0.0861067911,2.4454625,1.82605
+fixed_targeted,20000,0.9,0.77355,0.22645,0.0499,0.0645077888,2.076875,2.3415
+fixed_viva,20000,0.9,0.4686,0.5314,0.036,0.0768245839,6.0,1.0
