@@ -21,9 +21,11 @@ jobs:
         with:
           python-version: "3.12"
       - name: Install Python test dependencies
-        run: pip install pytest
+        run: python -m pip install --upgrade pip pytest pandas numpy scikit-learn
       - name: Run repository tests
-        run: pytest -q
+        env:
+          PYTHONPATH: ${{ github.workspace }}
+        run: python -m pytest -q
       - name: Install LaTeX toolchain
         run: |
           sudo apt-get update
