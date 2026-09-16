@@ -1,0 +1,21 @@
+# Submission checks
+
+- Manuscript: Beyond Outcome Attainment: Resolution-Based Education and the Certification–Assessment Resolution Gap in the Generative-AI Era
+- Build: `pdflatex main.tex` → `biber main` → `pdflatex main.tex` → `pdflatex main.tex`
+- Final PDF pages: 15
+- Abstract length: 200 words
+- Keywords: 6
+- Unique in-text bibliography keys: 39
+- Figures: 5
+- Tables: 6
+- Algorithms: 2
+- Cross-reference labels: 13
+- Unreferenced labels: 0
+- Final LaTeX warnings: none in final compile log
+- Final Biber warnings/errors: none
+- Visual QA: all 15 pages rendered and inspected; no visible clipping, overlap, missing glyphs, or broken floats.
+- Repository-wide GitHub test suite: workflow run 35074242019 — success.
+- Final OULAD burden bootstrap: workflow run 35074988489 — success; 3/3 offline tests passed.
+- Bootstrap result: mean evidence saving 2.366795 channels (39.45%); 95% percentile CI [2.311145, 2.423682]; corrected one-sided empirical p=0.0002; held-out n=6,505; 5,000 resamples.
+- Artifact ID: 10437304387; SHA256: b8fdb3073a7782e1001f588c834d79f7acaab9e7a8f0b7e8e1b6c29388dbdb0e.
+- Claim boundary checked: no claim of predictive superiority over fixed evidence; OULAD explicitly treated as retrospective observational proxy evidence.
