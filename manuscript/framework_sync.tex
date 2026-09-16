@@ -1,0 +1,69 @@
+% Frozen-framework synchronization insert for Paper V2.
+% Copyright (C) 2026 Mohammad Amir Khusru Akhtar
+
+\section{Framework Synchronization: From Outcome Attainment to Resolved Capability Attainment}
+\label{sec:framework-sync}
+
+The present article is the first scientific paper in a broader RBE research programme. Its purpose is deliberately narrower than a complete institutional specification. The full framework additionally addresses governance, accreditation, faculty systems, privacy, progression, programme quality assurance, and policy implementation. Here we synchronize only those parts of the framework that are necessary to make the scientific claims internally complete and operationally interpretable.
+
+\subsection{Resolvable Capability Outcomes}
+For course outcome $j$, define a \emph{Resolvable Capability Outcome}
+\[
+  \mathrm{RCO}_j=(C_j,E_j,P_j,D_j),
+\]
+where $C_j$ is the capability claim, $E_j$ is the set of relevant environments or tool conditions, $P_j$ is the admissible perturbation/evidence family, and $D_j$ is the certification distinction. A conventional course outcome can therefore be retained while being enriched with the evidence and decision semantics required for certification.
+
+This is a conservative extension. If the evidence already collected by a conventional outcome-based assessment resolves the required certification distinction, RBE requires no additional probe. Formally, if the initial evidence state $K_0$ satisfies the declared resolution criterion, then
+\[
+  B_{\mathrm{add}}(K_0)=0.
+\]
+Thus resolution-adequate OBE is a zero-additional-evidence case of RBE rather than an approach that RBE must replace.
+
+\subsection{One-step probes versus resolution policies}
+A single perturbation can be informative without being sufficient to restore resolution. We therefore distinguish a \emph{minimum discriminating probe} from a complete \emph{resolution-restoring policy}. For an adaptive policy $\pi$ with stopping time $\tau_\pi$, define
+\[
+  \pi^*\in\arg\min_{\pi\in\Pi_{\rm adm}} \mathbb{E}[B(\pi)]
+\]
+subject to terminal evidence satisfying the declared decision-resolution criterion, along with validity, accessibility, reliability, fairness, privacy, and maximum-burden constraints. The deterministic one-step MRRP used in the benchmark is the special case in which one perturbation alone resolves all remaining cross-decision pairs. In general, an adaptive policy tree may be required.
+
+\subsection{Performance attainment and positive resolution}
+RBE keeps marks/grades and certification resolution distinct. Let $S_{ij}$ be learner $i$'s performance score for RCO $j$, and $T_j$ the declared performance threshold:
+\[
+  A_{ij}=\mathbf{1}[S_{ij}\ge T_j].
+\]
+Let $r_{ij}$ be certification decision risk, $\epsilon_j$ the declared resolution threshold, $\widehat D_{ij}$ the resolved decision, and $d_j^+$ the positive certification decision. Positive resolution is
+\[
+  Q^+_{ij}=\mathbf{1}[r_{ij}\le\epsilon_j\ \land\ \widehat D_{ij}=d_j^+].
+\]
+Resolved Capability Attainment is therefore
+\[
+  \mathrm{RCA}_{ij}=A_{ij}Q^+_{ij}.
+\]
+The positive-decision condition is essential: low posterior risk can support either a positive or a negative decision, so risk alone must not be interpreted as attainment.
+
+Operational reporting should retain materially different states instead of collapsing them into one bit: Attained--Resolved Positive (AR), Attained--Unresolved (AU), Attained--Resolved Negative (RN) where that state is institutionally meaningful, Not Attained (NA), and Deferred when further authorized evidence remains possible.
+
+\subsection{Course and programme quantities}
+For $N$ eligible learner-RCO records,
+\[
+  \mathrm{PAR}_j=\frac{1}{N}\sum_i A_{ij},\qquad
+  \mathrm{RAR}_j=\frac{1}{N}\sum_i \mathrm{RCA}_{ij},
+\]
+\[
+  \mathrm{UAR}_j=\frac{\#\{i:A_{ij}=1,\ i\text{ unresolved}\}}{N},\qquad
+  \mathrm{MRB}_j=\frac{1}{N}\sum_i B_{ij}.
+\]
+The resolution rate $\mathrm{RR}_j$ should count all cases meeting the declared resolution criterion, positive or negative, while $\mathrm{RAR}_j$ counts only performance-attained, resolved-positive cases. If the only performance-attained terminal states are AR and AU, then $\mathrm{PAR}_j=\mathrm{RAR}_j+\mathrm{UAR}_j$. If a separate performance-attained/resolved-negative state is possible, it must be retained explicitly rather than forcing this identity.
+
+For a programme mapping weight $M_{jk}$ from RCO $j$ to programme outcome $k$, a compatibility-layer aggregation is
+\[
+  \mathrm{PPO}_k=\frac{\sum_j M_{jk}\,\mathrm{PAR}_j}{\sum_j M_{jk}},\quad
+  \mathrm{RPO}_k=\frac{\sum_j M_{jk}\,\mathrm{RAR}_j}{\sum_j M_{jk}},\quad
+  \mathrm{UPO}_k=\frac{\sum_j M_{jk}\,\mathrm{UAR}_j}{\sum_j M_{jk}}.
+\]
+These weighted summaries are not substitutes for direct programme-level evidence when the capability is integrative or high stakes; they are an implementation bridge to existing outcome-attainment systems.
+
+\subsection{A course-level interpretation}
+Consider two learners who both obtain $82/100$ on a course assessment. Their performance attainment may therefore be identical. Suppose, however, that a short constraint-shift probe shows that one learner can adapt and justify the underlying model while the other's evidence remains compatible with certification-incompatible explanations. RBE records the first learner as AR and the second as AU rather than changing the original mark. The purpose is not to infer hidden mental essence or misconduct. It is to distinguish performance evidence from the sufficiency of that evidence for the intended certification claim.
+
+This framework synchronization does not establish that RBE is superior to OBE, programmatic assessment, authentic assessment, or adaptive testing. It specifies the additional decision object evaluated in the remainder of the paper: whether the evidence available to a credential is sufficient to resolve the distinction that credential intends to certify.
