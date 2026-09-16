@@ -38,4 +38,4 @@ def test_course_metrics_keep_states_distinct():
 
 def test_weighted_programme_metric():
     value = weighted_programme_metric({"RCO1": 0.8, "RCO2": 0.6}, {"RCO1": 3, "RCO2": 1})
-    assert value == 0.75
+    assert abs(value - 0.75) < 1e-12
