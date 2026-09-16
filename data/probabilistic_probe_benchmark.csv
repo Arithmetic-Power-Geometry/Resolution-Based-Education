@@ -1,0 +1,5 @@
+world,certify,prior,artifact_score,p_wrong_ai,p_constraint_shift,p_transfer,p_generic_viva
+W1,1,0.25,0.92,0.90,0.94,0.90,0.95
+W2,1,0.25,0.92,0.65,0.88,0.82,0.91
+W3,0,0.25,0.92,0.55,0.20,0.30,0.16
+W4,0,0.25,0.92,0.20,0.12,0.22,0.10
