@@ -1,0 +1,27 @@
+name: OULAD burden bootstrap stop gate
+on:
+  workflow_dispatch:
+  push:
+    paths:
+      - 'benchmarks/oulad_burden_bootstrap.py'
+      - 'tests/test_oulad_burden_bootstrap.py'
+      - '.github/workflows/oulad-burden-bootstrap.yml'
+jobs:
+  bootstrap:
+    runs-on: ubuntu-latest
+    env:
+      PYTHONPATH: ${{ github.workspace }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip pandas numpy scikit-learn pytest
+      - name: Run offline bootstrap tests
+        run: python -m pytest -q tests/test_oulad_burden_bootstrap.py
+      - name: Run full OULAD burden bootstrap
+        run: python -m benchmarks.oulad_burden_bootstrap
+      - uses: actions/upload-artifact@v4
+        with:
+          name: oulad-burden-bootstrap-results
+          path: reports/oulad_burden_bootstrap_results.csv
