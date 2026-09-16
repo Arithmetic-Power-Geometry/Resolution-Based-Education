@@ -21,7 +21,6 @@ Copyright (C) 2026 Mohammad Amir Khusru Akhtar. Apache-2.0.
 from __future__ import annotations
 
 import io
-import math
 import urllib.request
 import zipfile
 from pathlib import Path
@@ -60,16 +59,24 @@ def build_features(z, cutoff=120, completers_only=False):
     sa = read(z, "studentAssessment.csv")
     sv = read(z, "studentVle.csv")
 
-    for c in ["date"]:
-        assessments[c] = pd.to_numeric(assessments[c], errors="coerce")
+    # OULAD studentAssessment is keyed by id_assessment + id_student; module and
+    # presentation live in assessments.csv. Merge on id_assessment first, then
+    # recover the course keys from assessments. This also guards the benchmark
+    # against silently assuming columns that are not in the official schema.
+    assessments["date"] = pd.to_numeric(assessments["date"], errors="coerce")
     for c in ["date_submitted", "score"]:
         sa[c] = pd.to_numeric(sa[c], errors="coerce")
     for c in ["date", "sum_click"]:
         sv[c] = pd.to_numeric(sv[c], errors="coerce")
 
     keys = ["code_module","code_presentation","id_student"]
-    a = sa.merge(assessments, on=["code_module","code_presentation","id_assessment"], how="left")
-    # Evidence available by cutoff; scheduled assessment date prevents using future assessments.
+    a = sa.merge(assessments, on="id_assessment", how="left", validate="many_to_one")
+    required = set(keys + ["id_assessment", "date", "date_submitted", "score"])
+    missing = required.difference(a.columns)
+    if missing:
+        raise ValueError(f"OULAD assessment merge missing required columns: {sorted(missing)}")
+
+    # Evidence available by cutoff; scheduled assessment date prevents future leakage.
     a = a[(a["date"].fillna(99999) <= cutoff) & (a["date_submitted"].fillna(99999) <= cutoff)].copy()
     a["lateness"] = a["date_submitted"] - a["date"]
     ag = a.groupby(keys, observed=True).agg(
@@ -89,7 +96,6 @@ def build_features(z, cutoff=120, completers_only=False):
     if completers_only:
         df = df[df["final_result"].isin(["Pass","Distinction","Fail"])].copy()
     df["certify"] = df["final_result"].isin(["Pass","Distinction"]).astype(int)
-    # Counts are true zeros when no logged evidence occurred before cutoff.
     for c in ["assessment_count","vle_clicks","active_days","vle_records"]:
         df[c] = df[c].fillna(0)
     return df
@@ -125,14 +131,9 @@ def metrics(y, p, mask=None):
     if len(yy) == 0:
         return dict(coverage=0., risk=np.nan, accuracy=np.nan, brier=np.nan, logloss=np.nan, auc=np.nan)
     pred = (pp >= .5).astype(int)
-    return dict(
-        coverage=float(mask.mean()),
-        risk=float(np.mean(pred != yy)),
-        accuracy=float(accuracy_score(yy,pred)),
-        brier=float(brier_score_loss(yy,pp)),
-        logloss=float(log_loss(yy,pp,labels=[0,1])),
-        auc=float(roc_auc_score(yy,pp)) if len(np.unique(yy)) > 1 else np.nan,
-    )
+    return dict(coverage=float(mask.mean()), risk=float(np.mean(pred != yy)), accuracy=float(accuracy_score(yy,pred)),
+                brier=float(brier_score_loss(yy,pp)), logloss=float(log_loss(yy,pp,labels=[0,1])),
+                auc=float(roc_auc_score(yy,pp)) if len(np.unique(yy)) > 1 else np.nan)
 
 
 def learn_order(train, val):
@@ -149,9 +150,6 @@ def learn_order(train, val):
 
 
 def adaptive_predictions(train, test, order, epsilon):
-    # Models are trained for every prefix. Each held-out student starts at the
-    # baseline and stops as soon as posterior plug-in decision risk min(p,1-p)
-    # is <= epsilon. If unresolved, the next evidence channel is acquired.
     probs=[]
     for k in range(1,len(order)+1):
         _, p=fit_predict(train,test,order[:k]); probs.append(p)
@@ -169,33 +167,22 @@ def adaptive_predictions(train, test, order, epsilon):
 def run_one(z, cutoff, completers_only, epsilon):
     df=build_features(z,cutoff,completers_only)
     train,val,test=split(df)
-    # Learn acquisition order without test labels, then refit on train+validation.
     order, order_df=learn_order(train,val)
     trainfull=pd.concat([train,val],ignore_index=True)
-    y=test.certify.to_numpy()
-    rows=[]
+    y=test.certify.to_numpy(); rows=[]
 
     def add(protocol,p,burden,resolved=None):
         mask=np.ones(len(y),dtype=bool) if resolved is None else resolved
         m=metrics(y,p,mask)
-        rows.append(dict(cutoff=cutoff,completers_only=completers_only,epsilon=epsilon,
-                         n=len(test),protocol=protocol,mean_evidence_burden=float(np.mean(burden)),**m))
+        rows.append(dict(cutoff=cutoff,completers_only=completers_only,epsilon=epsilon,n=len(test),protocol=protocol,
+                         mean_evidence_burden=float(np.mean(burden)),**m))
 
-    _, pbase=fit_predict(trainfull,test,BASE)
-    add("OBE_style_score_baseline",pbase,np.ones(len(test)))
-    _, pall=fit_predict(trainfull,test,order)
-    add("enhanced_fixed_all_evidence",pall,np.full(len(test),len(order)))
-
+    _, pbase=fit_predict(trainfull,test,BASE); add("OBE_style_score_baseline",pbase,np.ones(len(test)))
+    _, pall=fit_predict(trainfull,test,order); add("enhanced_fixed_all_evidence",pall,np.full(len(test),len(order)))
     prbe, used, resolved=adaptive_predictions(trainfull,test,order,epsilon)
-    # Report both selective resolved-only risk and forced final decision risk.
-    add("RBE_adaptive_resolved",prbe,used,resolved)
-    add("RBE_adaptive_forced",prbe,used)
-
-    # Matched-budget fixed prefix: closest integer prefix to RBE mean channel count.
+    add("RBE_adaptive_resolved",prbe,used,resolved); add("RBE_adaptive_forced",prbe,used)
     k=max(1,min(len(order),int(round(float(np.mean(used))))))
-    _, pmatch=fit_predict(trainfull,test,order[:k])
-    add("fixed_matched_budget_prefix",pmatch,np.full(len(test),k))
-
+    _, pmatch=fit_predict(trainfull,test,order[:k]); add("fixed_matched_budget_prefix",pmatch,np.full(len(test),k))
     od=order_df.copy(); od["cutoff"]=cutoff; od["completers_only"]=completers_only; od["epsilon"]=epsilon
     return rows,od
 
@@ -206,12 +193,9 @@ def main():
         for completers in [False,True]:
             for eps in [.05,.10,.20]:
                 rows,od=run_one(z,cutoff,completers,eps); all_rows.extend(rows); orders.append(od)
-    out=pd.DataFrame(all_rows)
-    OUT.parent.mkdir(parents=True,exist_ok=True)
-    out.to_csv(OUT,index=False)
+    out=pd.DataFrame(all_rows); OUT.parent.mkdir(parents=True,exist_ok=True); out.to_csv(OUT,index=False)
     pd.concat(orders,ignore_index=True).to_csv(ORDER_OUT,index=False)
-    print(out.to_string(index=False))
-    print("\nSaved",OUT,"and",ORDER_OUT)
+    print(out.to_string(index=False)); print("\nSaved",OUT,"and",ORDER_OUT)
 
 if __name__ == "__main__":
     main()
