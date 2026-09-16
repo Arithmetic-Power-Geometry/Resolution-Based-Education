@@ -1,0 +1,2 @@
+cutoff,completers_only,epsilon,n,n_boot,fixed_all_burden,rbe_mean_burden,mean_burden_saving,relative_saving,ci95_low,ci95_high,bootstrap_p_saving_le_zero,rbe_resolved_coverage
+120,False,0.2,6505,5000,6.0,3.633205,2.366795,0.394466,2.311145,2.423682,0.0002,0.527287
