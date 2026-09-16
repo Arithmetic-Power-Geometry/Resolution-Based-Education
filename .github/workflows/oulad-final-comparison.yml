@@ -1,0 +1,31 @@
+name: OULAD final fixed-vs-adaptive comparison
+
+on:
+  push:
+    paths:
+      - 'benchmarks/oulad_final_comparison.py'
+      - 'tests/test_oulad_final_comparison.py'
+      - '.github/workflows/oulad-final-comparison.yml'
+  workflow_dispatch:
+
+jobs:
+  final-comparison:
+    runs-on: ubuntu-latest
+    timeout-minutes: 45
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+      - run: python -m pip install --upgrade pip pandas numpy scikit-learn pytest
+      - name: Run offline falsification tests
+        run: PYTHONPATH=${{ github.workspace }} python -m pytest -q tests/test_oulad_final_comparison.py
+      - name: Run full OULAD comparison
+        run: python benchmarks/oulad_final_comparison.py
+      - name: Save numerical artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: oulad-final-comparison-results
+          path: |
+            reports/oulad_final_comparison_results.csv
+            reports/oulad_rbe_acquisition_order.csv
