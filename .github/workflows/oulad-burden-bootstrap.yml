@@ -6,6 +6,7 @@ on:
       - 'benchmarks/oulad_burden_bootstrap.py'
       - 'tests/test_oulad_burden_bootstrap.py'
       - '.github/workflows/oulad-burden-bootstrap.yml'
+# Final statistical stop-gate for the submission manuscript.
 jobs:
   bootstrap:
     runs-on: ubuntu-latest
