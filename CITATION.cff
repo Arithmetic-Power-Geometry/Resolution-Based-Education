@@ -1,0 +1,22 @@
+cff-version: 1.2.0
+message: "If you use this software or the RBE foundation in your research, please cite the work below."
+title: "Resolution-Based Education"
+type: software
+authors:
+  - family-names: "Akhtar"
+    given-names: "Mohammad Amir Khusru"
+    orcid: "https://orcid.org/0000-0002-3432-4199"
+year: 2026
+license: Apache-2.0
+repository-code: "https://github.com/Arithmetic-Power-Geometry/Resolution-Based-Education"
+preferred-citation:
+  type: article
+  authors:
+    - family-names: "Akhtar"
+      given-names: "Mohammad Amir Khusru"
+      orcid: "https://orcid.org/0000-0002-3432-4199"
+  title: "Beyond Outcome Attainment: Resolution-Based Education and the Certification–Assessment Resolution Gap in the Generative-AI Era"
+  year: 2026
+  version: "V1"
+  doi: "10.5281/zenodo.22797079"
+  url: "https://doi.org/10.5281/zenodo.22797079"
